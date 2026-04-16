@@ -20,7 +20,27 @@ export default function CatererDetails() {
   const addToCart = (item) => {
     setCart([...cart, item]);
   };
-
+  const bookOrder = async () => {
+  if (cart.length === 0) return alert("Add at least one item to cart!");
+  try {
+    const token = JSON.parse(localStorage.getItem("user"))?.token;
+    await axios.post(
+      "http://localhost:5000/api/orders",
+      {
+        caterer: id,
+        items: cart,
+        totalAmount: cart.length * data.price,
+        eventDate: new Date(),
+        guestCount: 1,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    alert("Order placed successfully! 🎉");
+    setCart([]);
+  } catch (err) {
+    alert(err.response?.data?.message || "Booking failed");
+  }
+};
   if (!data) return <p className="p-10">Loading...</p>;
 
   return (
@@ -74,7 +94,7 @@ export default function CatererDetails() {
       )}
 
       {/* BOOK BUTTON */}
-      <button className="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg">
+      <button onClick={bookOrder} className="mt-6 bg-green-600 text-white px-6 py-3 rounded-lg">
         Book Now 🚀
       </button>
     </div>

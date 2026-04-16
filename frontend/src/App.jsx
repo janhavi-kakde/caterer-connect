@@ -4,8 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CatererDetails from "./pages/CatererDetails";
-import { useNavigate } from "react-router-dom";
-
+import Orders from "./pages/Orders";          // ← ADD
 
 export default function App() {
   return (
@@ -16,6 +15,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/caterer/:id" element={<CatererDetails />} />
+        <Route path="/orders" element={<Orders />} />   {/* ← ADD */}
       </Routes>
     </Router>
   );

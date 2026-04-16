@@ -1,7 +1,79 @@
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/useAuth";
+
 export default function Register() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const { data } = await axios.post("http://localhost:5000/api/auth/register", form);
+      login(data);          // auto-login after register
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-4xl">Register Page</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="bg-white p-10 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-2">Create Account 🍽️</h2>
+        <p className="text-center text-gray-500 mb-8">Join CaterConnect today</p>
+
+        {error && (
+          <p className="bg-red-100 text-red-600 text-sm px-4 py-2 rounded-lg mb-4">
+            {error}
+          </p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {[
+            { label: "Full Name", key: "name", type: "text", placeholder: "John Doe" },
+            { label: "Email", key: "email", type: "email", placeholder: "you@example.com" },
+            { label: "Phone", key: "phone", type: "tel", placeholder: "9876543210" },
+            { label: "Password", key: "password", type: "password", placeholder: "••••••••" },
+          ].map(({ label, key, type, placeholder }) => (
+            <div key={key}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+              <input
+                type={type}
+                required
+                placeholder={placeholder}
+                className="w-full border border-gray-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-primary"
+                value={form[key]}
+                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+              />
+            </div>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:opacity-90 transition disabled:opacity-60"
+          >
+            {loading ? "Creating account..." : "Register"}
+          </button>
+        </form>
+
+        <p className="text-center text-gray-500 mt-6">
+          Already have an account?{" "}
+          <Link to="/login" className="text-primary font-semibold hover:underline">
+            Login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
