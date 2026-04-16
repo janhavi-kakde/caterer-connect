@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema(
       state: String,
       pincode: String,
     },
+    catererId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Caterer",
+},
   },
   { timestamps: true }
 );

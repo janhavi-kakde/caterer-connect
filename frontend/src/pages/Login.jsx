@@ -6,7 +6,11 @@ export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+  email: "",
+  password: "",
+  role: "user", 
+});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +21,11 @@ export default function Login() {
     try {
       const { data } = await axios.post("http://localhost:5000/api/auth/login", form);
       login(data);          // saves user + token
-      navigate("/");        // redirect to home
+      if (data.role === "user") {
+  navigate("/");
+} else if (data.role === "caterer") {
+  navigate("/caterer/dashboard");
+}       // redirect to home
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
@@ -26,6 +34,7 @@ export default function Login() {
   };
 
   return (
+    
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-10 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-3xl font-bold text-center mb-2">Welcome Back 👋</h2>
@@ -38,6 +47,17 @@ export default function Login() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          <select
+  name="role"
+  value={form.role}
+  onChange={(e) =>
+    setForm({ ...form, role: e.target.value })
+  }
+  className="border p-2 w-full mt-2"
+>
+  <option value="user">User</option>
+  <option value="caterer">Caterer</option>
+</select>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input

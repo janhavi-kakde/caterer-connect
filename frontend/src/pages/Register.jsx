@@ -7,7 +7,14 @@ export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    role: "user", // ✅ NEW
+  });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -15,10 +22,22 @@ export default function Register() {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
-      const { data } = await axios.post("http://localhost:5000/api/auth/register", form);
-      login(data);          // auto-login after register
-      navigate("/");
+      const { data } = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        form
+      );
+
+      // ✅ Auto login
+      login(data);
+
+      // ✅ Role-based redirect
+      if (data.role === "caterer") {
+        navigate("/caterer/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     } finally {
@@ -29,8 +48,12 @@ export default function Register() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-10 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-2">Create Account 🍽️</h2>
-        <p className="text-center text-gray-500 mb-8">Join CaterConnect today</p>
+        <h2 className="text-3xl font-bold text-center mb-2">
+          Create Account 🍽️
+        </h2>
+        <p className="text-center text-gray-500 mb-8">
+          Join CaterConnect today
+        </p>
 
         {error && (
           <p className="bg-red-100 text-red-600 text-sm px-4 py-2 rounded-lg mb-4">
@@ -39,6 +62,7 @@ export default function Register() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          {/* EXISTING FIELDS */}
           {[
             { label: "Full Name", key: "name", type: "text", placeholder: "John Doe" },
             { label: "Email", key: "email", type: "email", placeholder: "you@example.com" },
@@ -46,18 +70,40 @@ export default function Register() {
             { label: "Password", key: "password", type: "password", placeholder: "••••••••" },
           ].map(({ label, key, type, placeholder }) => (
             <div key={key}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {label}
+              </label>
               <input
                 type={type}
                 required
                 placeholder={placeholder}
                 className="w-full border border-gray-300 p-3 rounded-xl outline-none focus:ring-2 focus:ring-primary"
                 value={form[key]}
-                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, [key]: e.target.value })
+                }
               />
             </div>
           ))}
 
+          {/* ✅ NEW ROLE SELECT */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Register As
+            </label>
+            <select
+              value={form.role}
+              onChange={(e) =>
+                setForm({ ...form, role: e.target.value })
+              }
+              className="w-full border border-gray-300 p-3 rounded-xl"
+            >
+              <option value="user">User</option>
+              <option value="caterer">Caterer</option>
+            </select>
+          </div>
+
+          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
@@ -69,7 +115,10 @@ export default function Register() {
 
         <p className="text-center text-gray-500 mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-primary font-semibold hover:underline">
+          <Link
+            to="/login"
+            className="text-primary font-semibold hover:underline"
+          >
             Login
           </Link>
         </p>

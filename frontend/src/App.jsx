@@ -4,7 +4,10 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CatererDetails from "./pages/CatererDetails";
-import Orders from "./pages/Orders";          // ← ADD
+import CatererLayout from "./caterer/layout/CatererLayout";
+import Dashboard from "./caterer/pages/Dashboard";
+import MenuManager from "./caterer/pages/MenuManager";
+import Orders from "./caterer/pages/Orders";
 
 export default function App() {
   return (
@@ -16,6 +19,11 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/caterer/:id" element={<CatererDetails />} />
         <Route path="/orders" element={<Orders />} />   {/* ← ADD */}
+        <Route path="/caterer" element={<CatererLayout />}>
+  <Route path="dashboard" element={<Dashboard />} />
+  <Route path="menu" element={<MenuManager />} />
+  <Route path="orders" element={<Orders />} />
+</Route>
       </Routes>
     </Router>
   );
