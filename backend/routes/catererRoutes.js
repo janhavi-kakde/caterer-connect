@@ -43,14 +43,27 @@ router.get("/profile/:id", async (req, res) => {
 // ===============================
 router.patch("/menu/:catererId", async (req, res) => {
   try {
+    const { menu, image, location } = req.body;
+
     const updated = await Caterer.findByIdAndUpdate(
       req.params.catererId,
-      { menu: req.body.menu },
+      {
+        $set: {
+          menu,
+          image,
+          location
+        }
+      },
       { new: true }
     );
 
+    if (!updated) {
+      return res.status(404).json({ message: "Caterer not found" });
+    }
+
     res.json(updated);
   } catch (err) {
+    console.log("MENU UPDATE ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });

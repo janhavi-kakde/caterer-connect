@@ -24,10 +24,12 @@ app.use("/api/caterer", catererDashboardRoutes); // 🔹 for dashboard/orders
 app.use("/api/auth", authRoutes);                      // ← ADD
 app.use("/api/orders", orderRoutes);  
 // 🔥 CONNECT MONGO
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.log("❌ DB ERROR:", err));
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
+  console.log("Mongo Connected");
+  console.log("DB Name:", mongoose.connection.name);
+})
+.catch(err => console.log("DB ERROR:", err));
 
 // TEST ROUTE
 app.get("/", (req, res) => {

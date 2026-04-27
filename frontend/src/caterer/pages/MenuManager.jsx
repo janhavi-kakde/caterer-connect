@@ -11,22 +11,31 @@ export default function MenuManager() {
     setItem("");
   };
 
-  const saveMenu = async () => {
-    try {
-      const user = JSON.parse(localStorage.getItem("cater-user"));
+const saveMenu = async () => {
+  try {
+    const user = JSON.parse(localStorage.getItem("cater-user"));
 
-      await axios.patch(
-        `http://localhost:5000/api/caterers/menu/${user.catererId}`,
-        { menu }
-      );
+    const payload = {
+      menu,
+      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+      location: {
+        city: "Aurangabad",
+        state: "Maharashtra"
+      }
+    };
 
-      alert("Menu saved!");
-    } catch (err) {
-      console.log(err);
-      alert("Failed to save menu");
-    }
-  };
+    const res = await axios.patch(
+      `http://localhost:5000/api/caterers/menu/${user.catererId}`,
+      payload
+    );
 
+    console.log("UPDATED:", res.data);
+    alert("Caterer updated!");
+  } catch (err) {
+    console.log(err);
+    alert("Failed to update caterer");
+  }
+};
   return (
     <div>
       <h1 className="text-xl font-bold">Manage Menu</h1>
