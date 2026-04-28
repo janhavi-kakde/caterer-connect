@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { API_URL } from "../../config";
+import { API_URL } from "../config";
 export default function CatererDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
