@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/useAuth";
+import { API_URL } from "../../config";
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -19,7 +20,7 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:5000/api/auth/login", form);
+      const { data } = await axios.post(`${API_URL}/api/auth/login`, form);
       login(data);          // saves user + token
       if (data.role === "user") {
   navigate("/");

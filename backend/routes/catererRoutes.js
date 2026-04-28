@@ -72,6 +72,7 @@ router.patch("/menu/:catererId", async (req, res) => {
 // ===============================
 // ✅ 4. GET ALL CATERERS (CARDS)
 // ===============================
+//For user
 router.get("/", async (req, res) => {
   try {
     const data = await Caterer.find();

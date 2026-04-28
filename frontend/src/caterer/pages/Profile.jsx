@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { API_URL } from "../config";
 export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ export default function Profile() {
       if (!user) return;
 
       const res = await axios.get(
-        `http://localhost:5000/api/caterer/profile/${user._id}`
+        `${API_URL}/api/caterer/profile/${user._id}`
       );
 
       setProfile(res.data);

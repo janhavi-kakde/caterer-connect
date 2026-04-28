@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/useAuth";
+import { API_URL } from "../../config";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Register() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${API_URL}/api/auth/register`,
         form
       );
 

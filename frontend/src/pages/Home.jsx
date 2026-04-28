@@ -2,7 +2,7 @@ import video from "../assets/food.mp4";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { API_URL } from "../../config";
 export default function Home() {
   const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ export default function Home() {
   // 🔥 FETCH DATA
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/caterers")
+      .get(`${API_URL}/api/caterers`)
       .then((res) => {
         console.log("API DATA:", res.data); // 🔍 DEBUG
         setCaterers(res.data);

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../config";
+
 import {
   BarChart,
   Bar,
@@ -28,7 +30,7 @@ export default function Dashboard() {
     if (!user?.catererId) return;
 
     const res = await axios.get(
-      `http://localhost:5000/api/caterers/dashboard/${user.catererId}`
+      `${API_URL}/api/caterers/dashboard/${user.catererId}`
     );
 
     setStats(res.data);

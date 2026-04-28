@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-
+import { API_URL } from "../config";
 export default function MenuManager() {
   const [menu, setMenu] = useState([]);
   const [item, setItem] = useState("");
@@ -23,6 +23,10 @@ const saveMenu = async () => {
         state: "Maharashtra"
       }
     };
+      await axios.patch(
+        `${API_URL}/api/caterers/menu/${user.catererId}`,
+        { menu }
+      );
 
     const res = await axios.patch(
       `http://localhost:5000/api/caterers/menu/${user.catererId}`,

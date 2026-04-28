@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { API_URL } from "../config";
 export default function CatererOrders() {
   const [orders, setOrders] = useState([]);
 
@@ -16,7 +16,7 @@ export default function CatererOrders() {
       console.log("Using catererId:", user.catererId);
 
       const res = await axios.get(
-        `http://localhost:5000/api/caterer/orders/${user.catererId}`
+        `${API_URL}/api/caterer/orders/${user.catererId}`
       );
 
       console.log("Orders received:", res.data);
@@ -34,7 +34,7 @@ export default function CatererOrders() {
   const updateStatus = async (orderId, status) => {
     try {
       await axios.patch(
-        `http://localhost:5000/api/caterer/order/${orderId}/status`,
+        `${API_URL}/api/caterer/order/${orderId}/status`,
         { status }
       );
 

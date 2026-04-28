@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import { API_URL } from "../../config";
 export default function CatererDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function CatererDetails() {
 
 useEffect(() => {
   axios
-    .get(`http://localhost:5000/api/caterers/${id}`)
+    .get(`${API_URL}/api/caterers/${id}`)
     .then((res) => setData(res.data))
     .catch((err) => console.log(err));
 }, [id]);
@@ -49,7 +49,7 @@ useEffect(() => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/orders",
+        `${API_URL}/api/orders`,
         {
           caterer: id,
           items: cart.map((item) => ({
